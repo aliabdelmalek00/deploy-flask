@@ -6,7 +6,7 @@
     - secret
 
   roles:
-    - flask-api
+    - falsk-api
 
   environment:
     DEBUG: "{{ lookup('ansible.builtin.env', 'DEBUG') }}"
