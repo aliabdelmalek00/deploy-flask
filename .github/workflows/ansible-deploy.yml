@@ -51,7 +51,7 @@ jobs:
           remote_tmp="${{ inputs.HOME_DIR }}/.ansible/tmp"
           remote_user="${{ inputs.REMOTE_USER }}"
           host_key_checking=False
-          private_key_file = ./ansible/devops-key
+          private_key_file = ./devops-key
           retries=2
           EOF
 
