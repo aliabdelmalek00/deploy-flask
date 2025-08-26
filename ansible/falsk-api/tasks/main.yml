@@ -10,7 +10,7 @@
 
     - name: Copy compose file to server
       ansible.builtin.copy:
-        src: "files/"
+        src: "files/docker-compose.yml"
         dest: "{{ lookup('ansible.builtin.env', 'HOME_DIR') }}/{{ lookup('ansible.builtin.env', 'PROJECT_DIR') }}/.flask-app/"
 
     # Uncomment this when working with private repositories
