@@ -29,7 +29,8 @@ jobs:
       - name: Add SSH keys
         run: |
            echo "${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}" > ansible/devops-key
-           chmod 400 ansible/devops-key
+           chmod 600 ansible/devops-key
+           ssh-keygen -p -m PEM -f ansible/devops-key -N ""
            
       - name: install ansible
         run: |
