@@ -5,7 +5,7 @@ on:
     inputs:
       REMOTE_USER:
         type: string
-        description: 'Remote User'
+        description: 'Remot User'
         required: true
         default: 'azureuser'
       HOME_DIR:
@@ -16,22 +16,29 @@ on:
       TARGET_HOST:
         description: 'Target Host'
         required: true
-        default: "20.151.177.123"
-jobs: 
-  ansible:
+        default: "40.82.176.1" # Change this to your server IP or Domain
+
+jobs:
+   ansible:
     runs-on: ubuntu-latest
     env:
       DEBUG: 0
     steps:
-      - name: checkout
+
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Add SSH keys
+      - name: Add SSH Keys
         run: |
-           echo "${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}" > ansible/devops-key
-           chmod 400 ansible/devops-key
-        
-      - name: install ansible
+          cat << EOF > ansible/devops-key
+          ${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}
+          EOF
+
+      - name: Update devops private key permissions
+        run: |
+          chmod 400 ansible/devops-key
+
+      - name: Install Ansible
         run: |
           pip install ansible
 
@@ -41,6 +48,7 @@ jobs:
           [webservers]
           ${{ inputs.TARGET_HOST }}
           EOF
+
       - name: Adding or Override Ansible Config File
         run: |
           cat << EOF > ./ansible/ansible.cfg
@@ -51,7 +59,7 @@ jobs:
           remote_tmp="${{ inputs.HOME_DIR }}/.ansible/tmp"
           remote_user="${{ inputs.REMOTE_USER }}"
           host_key_checking=False
-          private_key_file = ./ansible/devops-key
+          private_key_file = ./devops-key
           retries=2
           EOF
 
@@ -59,5 +67,4 @@ jobs:
         run: |
           sh ansible/create-sudo-password-ansible-secret.sh ${{ secrets.SUDO_PASSWORD }}
           ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook ansible/deploy.yml --vault-password-file=ansible/vault.txt
-      
-        
+          
