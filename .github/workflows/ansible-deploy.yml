@@ -28,13 +28,9 @@ jobs:
 
       - name: Add SSH keys
         run: |
-          cat << EOF > ansible/devops-key
-          ${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}
-          EOF
-          
-      - name: Update devops private key permessions
-        run: |
-          chmod 400 ansible/devops-key
+           echo "${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}" > ansible/devops-key
+           chmod 400 ansible/devops-key
+           
       - name: install ansible
         run: |
           pip install ansible
@@ -55,7 +51,7 @@ jobs:
           remote_tmp="${{ inputs.HOME_DIR }}/.ansible/tmp"
           remote_user="${{ inputs.REMOTE_USER }}"
           host_key_checking=False
-          private_key_file = ./devops-key
+          private_key_file = ./ansible/devops-key
           retries=2
           EOF
 
