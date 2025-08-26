@@ -30,9 +30,8 @@ jobs:
 
       - name: Add SSH Keys
         run: |
-          cat << EOF > ansible/devops-key
-          ${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}
-          EOF
+          echo "${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}" > ansible/devops-key
+          chmod 400 ansible/devops-key
 
       - name: Update devops private key permissions
         run: |
