@@ -7,12 +7,12 @@ on:
         type: string
         description: 'Remote User'
         required: true
-        default: 'ubuntu'
+        default: 'azureuser'
       HOME_DIR:
         type: string
         description: 'Home Directory'
         required: true
-        default: '/home/ubuntu'
+        default: '/home/azureuser'
       TARGET_HOST:
         description: 'Target Host'
         required: true
@@ -29,9 +29,8 @@ jobs:
       - name: Add SSH keys
         run: |
            echo "${{ secrets.SSH_DEVOPS_KEY_PRIVATE }}" > ansible/devops-key
-           chmod 600 ansible/devops-key
-           ssh-keygen -p -m PEM -f ansible/devops-key -N ""
-           
+           chmod 400 ansible/devops-key
+        
       - name: install ansible
         run: |
           pip install ansible
